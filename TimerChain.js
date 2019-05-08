@@ -43,7 +43,7 @@ var TimerChain = (function(){
 		"stop":{
 			value:function(){
 				this.isStop = true;
-				this._stop();
+				this.clearTm();
 				return this;
 			}
 		},
