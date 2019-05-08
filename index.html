@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="ko" >
 <head>
-	<title>Timeer chain</title>
+	<title>Timer chain</title>
 	<meta charset="utf-8">
 	<meta http-equiv="Content-Script-Type" content="text/javascript">
 	<meta http-equiv="Content-Style-Type" content="text/css">
@@ -33,12 +33,12 @@
 	
 	<!-- meta og -->
 	
-	<meta property="og:title" content="Timeer chain">
-	<meta property="og:description" content="Timeer chain">
+	<meta property="og:title" content="Timer chain">
+	<meta property="og:description" content="Timer chain">
 	<meta name="og:image" content="http://www.mins01.com/img/logo.gif">
 	<meta property="og:image:width" content="190">
 	<meta property="og:image:height" content="70" />
-	<meta property="og:site_name" content="Timeer chain" />
+	<meta property="og:site_name" content="Timer chain" />
 	<meta property="og:type" content="website">
 	
 	<!-- //meta og -->
@@ -107,7 +107,43 @@
 </head>
 <body>
 	<div class="container">
-		<h1>Timer chain</h1>
+		<h1>TimerChain</h1>
+		<ul>
+			<li>setTimeout 을 순차적으로 동작하도록 함</li>
+			<li>Array.prototype 를 상속 받아서 사용</li>
+			<li>defineProperty 로 메소드와 변수들을 선언</li>
+			<li>var tc = new  TimerChain() 처럼 사용. 클래스화 </li>
+			<li>tc.push(fn,timout).push(fn,timout).start() 처럼 메소드 체이닝</li>
+		</ul>
+		<h2>construct</h2>
+		<ul>
+			<li>var tc = new TimerChain();</li>
+		</ul>
+		<h2>method</h2>
+		<ul>
+			<li>대부분의 메소드는 Array 에서 상속받음</li>
+			<li>.push(function, timeout)<br />
+				timeout에 맞춰서 동작 할 function 을 추가.
+			</li>
+			<li>.clear()<br />
+				추가한 function 들을 삭제. 모든 function 이 삭제되면 TimerChain 동작이 중지됨
+			</li>
+			<li>.start()<br />
+				TimerChain 시작. 순차적인 setTimeout 동작
+			</li>
+			<li>.stop()<br />
+				TimerChain 종료. 다시 .start()하면 남은 function 만큼 동작함.
+			</li>
+			<li>.clearTm()<br />
+				내부 .tm 의 clearTimeout 동작용
+			</li>
+		</ul>
+		<h2>variable</h2>
+		<ul>
+			<li>대부분의 멤버 변수는 Array 에서 상속받음</li>
+			<li>.isStop = false or true<br />동작 중지 여부</li>
+			<li>.tm = null or int<br />setTimeout의 timeoutID</li>
+		</ul>
 	</div>
 </body>
 </html>
