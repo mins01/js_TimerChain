@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="ko" >
+<head>
+	<title>Timeer chain</title>
+	<meta charset="utf-8">
+	<meta http-equiv="Content-Script-Type" content="text/javascript">
+	<meta http-equiv="Content-Style-Type" content="text/css">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<link rel="shortcut icon" href="http://www.mins01.com/favicon.ico">	
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	
+	<!-- Global site tag (gtag.js) - Google Analytics --> 
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-28167507-1"></script> 
+	<script>
+	if(document.location.hostname =='mins01.com' ||document.location.hostname =='www.mins01.com'){
+		 window.dataLayer = window.dataLayer || []; 
+		 function gtag(){dataLayer.push(arguments);} 
+		 gtag('js', new Date()); gtag('config', 'UA-28167507-1'); 
+	 }
+	</script> 
+	
+	<!-- jquery 관련 -->
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" crossorigin="anonymous"></script>  
+
+
+	<!-- 부트스트랩 4 : IE8지원안됨! -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" crossorigin="anonymous"> 
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" crossorigin="anonymous"></script> 
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" crossorigin="anonymous"></script>
+	<!-- vue.js -->
+	<!-- <script src="https://cdn.jsdelivr.net/npm/vue"></script> -->
+	
+	<!-- meta og -->
+	
+	<meta property="og:title" content="Timeer chain">
+	<meta property="og:description" content="Timeer chain">
+	<meta name="og:image" content="http://www.mins01.com/img/logo.gif">
+	<meta property="og:image:width" content="190">
+	<meta property="og:image:height" content="70" />
+	<meta property="og:site_name" content="Timeer chain" />
+	<meta property="og:type" content="website">
+	
+	<!-- //meta og -->
+	
+	<script src="TimerChain.js"></script>
+	<script>
+	var tc = null;
+	var tc2 = null;
+	var tc3 = null;
+	var n=0,n2=0,n3=0;
+	tc = new TimerChain();
+	tc2 = new TimerChain();
+	tc3 = new TimerChain();
+	tc.push(function(){
+		n++;
+		console.log("#1",(new Date).toString());
+	},1000)
+	.push(function(){
+		n++;
+		console.log("#2",(new Date).toString());
+		tc2.push(function(){
+			n2++;
+			console.log("#2-1",(new Date).toString());
+			console.assert(tc2.length==1);
+			console.assert(n2==1);
+		},1000)
+		.push(function(){
+			n2++;
+			console.log("#2-2",(new Date).toString());
+			console.assert(tc2.length==0);
+			console.assert(n2==2);
+		},1000)
+		.start();
+	},1000)
+	.push(function(){
+		n++;
+		console.log("#3",(new Date).toString());
+		tc3.push(function(){
+			n3++
+			console.log("#3-1",(new Date).toString());
+			console.assert(tc3.length==1);
+			console.assert(n3==1);
+		},1000)
+		.push(function(){
+			n3++
+			console.log("#3-2",(new Date).toString());
+			console.assert(tc3.length==0);
+			console.assert(n3==2);
+		},1000)
+		.start();
+		
+		tc.stop();
+		console.assert(tc.length==1);
+		console.assert(n==3);
+		tc.clear()
+	},1000)
+	.push(function(){
+		n++;
+		console.log("#4",(new Date).toString(),'보이면 안됨');
+	},1000)
+	.start();
+	// tc.start()
+	
+	
+	</script>
+</head>
+<body>
+	<div class="container">
+		<h1>Timer chain</h1>
+	</div>
+</body>
+</html>
