@@ -1,4 +1,5 @@
 var TimerChain = (function(){
+	"use strict";
 	var TimerChain = function(){	
 	};
 	TimerChain.prototype = Object.create(Array.prototype,{
