@@ -74,6 +74,11 @@
 		tc.run().run(); //15와 16이 거의 동시에 나옴
 		console.log(tc)
 	},0).push(cb(15),1015).push(cb(16),1016);
+	//모든게 다 떨어졌을 때 동작
+	setTimeout(function(){
+		console.log(tc.length)
+		tc.push(cb(17),1017).start();
+	},10000); 
 	
 	
 	

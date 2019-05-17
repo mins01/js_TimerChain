@@ -70,6 +70,8 @@ var TimerChain = (function(){
 					}(arr[0],this),arr[1]);
 					this.lastCallback = arr[0];
 					this.lastTimeout = arr[1];
+				}else{
+					this.isRunning = false;
 				}
 				return this;
 			}
