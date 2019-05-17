@@ -2,7 +2,7 @@
  * TimerChain
  * http://mins01.com
  * https://github.com/mins01/js_TimerChain
- * Date : 2019-05-09
+ * Date : 2019-05-17
  */
 var TimerChain = (function(){
 	"use strict";
