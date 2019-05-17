@@ -1,9 +1,9 @@
 /**
- * TimerChain
- * http://mins01.com
- * https://github.com/mins01/js_TimerChain
- * Date : 2019-05-17
- */
+* TimerChain
+* http://mins01.com
+* https://github.com/mins01/js_TimerChain
+* Date : 2019-05-17
+*/
 var TimerChain = (function(){
 	"use strict";
 	var TimerChain = function(){	
@@ -70,7 +70,8 @@ var TimerChain = (function(){
 					}(arr[0],this),arr[1]);
 					this.lastCallback = arr[0];
 					this.lastTimeout = arr[1];
-				}else{
+				}
+				if(this.length==0){
 					this.isRunning = false;
 				}
 				return this;
@@ -90,6 +91,6 @@ var TimerChain = (function(){
 			}
 		},
 	});
-
+	
 	return TimerChain;
 })()
