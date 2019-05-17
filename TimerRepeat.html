@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="ko" >
+<head>
+	<title>Timer repeat</title>
+	<meta charset="utf-8">
+	<meta http-equiv="Content-Script-Type" content="text/javascript">
+	<meta http-equiv="Content-Style-Type" content="text/css">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<link rel="shortcut icon" href="http://www.mins01.com/favicon.ico">	
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	
+	<script src="http://www.mins01.com/js/ForGoogle.js"></script> 
+	<!-- google analytics --> 
+	<script>ForGoogle.analytics()</script>
+	
+	<!-- jquery 관련 -->
+	<!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" crossorigin="anonymous"></script>   -->
+
+
+	<!-- 부트스트랩 4 : IE8지원안됨! -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" crossorigin="anonymous"> 
+	<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" crossorigin="anonymous"></script>  -->
+	<!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" crossorigin="anonymous"></script> -->
+	<!-- vue.js -->
+	<!-- <script src="https://cdn.jsdelivr.net/npm/vue"></script> -->
+	
+	<!-- meta og -->
+	
+	<meta property="og:title" content="Timer repeat">
+	<meta property="og:description" content="Timer repeat">
+	<meta name="og:image" content="http://www.mins01.com/img/logo.gif">
+	<meta property="og:image:width" content="190">
+	<meta property="og:image:height" content="70" />
+	<meta property="og:site_name" content="Timer repeat" />
+	<meta property="og:type" content="website">
+	
+	<!-- //meta og -->
+	
+	<script src="TimerRepeat.js"></script>
+	<script>
+	var cb = function(c){
+		return function(){
+			console.log(c,(new Date()).getTime() );
+		}
+	}
+	var tr = new TimerRepeat();
+	var tr2 = new TimerRepeat();
+	tr.start(cb(0),1000);
+	tr2.start(cb(100),1000);
+	setTimeout(function(){
+		console.log("tr.stop()");
+		tr.stop()},3000)
+	setTimeout(function(){
+		console.log("tr.start()");
+		tr.start()},5000)
+	setTimeout(function(){
+		console.log("tr.start(cb(1))");
+		tr.start(cb(1))},7000)
+	setTimeout(function(){
+		console.log("tr.changeInterval(500)");
+		tr.changeInterval(500)},9000)
+	
+	
+
+	</script>
+</head>
+<body>
+	<div class="container">
+		<h1>TimerRepeat</h1>
+		<ul>
+			<li>setInterval 다루기 쉽도록 객체화</li>
+		</ul>
+		<h2>construct</h2>
+		<ul>
+			<li>var tr = new TimerRepeat();</li>
+		</ul>
+		<h2>methods</h2>
+		<ul>
+			<li>.start([callback,[interval]])<br />
+				callback 함수를 interval 마다 실행한다.<br />
+				각 값이 null 이면 lastCallback, lastTimeout 을 사용한다.
+			</li>
+			<li>.changeInterval(interval)<br />
+				interval 를 바꿔서 다시 실행
+			</li>
+			<li>.run(callback,interval)<br />
+				callback 함수를 interval 마다 실행한다.<br />
+				아규멘트 값이 없으면 에러!
+			</li>
+			<li>.stop()<br />
+				setInterval 를 중지한다.
+			</li>
+		</ul>
+		<h2>properties</h2>
+		<ul>
+			<li>.lastCallback = null or Function<br />마지막 동작 함수</li>
+			<li>.lastInterval = null or int<br />마지막 동작 interval</li>
+			<li>.tm = null or int<br />setTimeout의 timeoutID</li>
+		</ul>
+	</div>
+</body>
+</html>
