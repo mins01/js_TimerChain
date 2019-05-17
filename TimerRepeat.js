@@ -17,19 +17,23 @@ var TimerRepeat = (function(){
 			if(interval==null){ interval = this.lastInterval; }
 			return this.run(callback,interval);
 	}
+	trp.changeCallback = function(callback){
+		this.lastCallback = callback;
+		return this
+	}
 	trp.changeInterval = function(interval){
-		var callback = this.lastCallback; 
-		return this.run(callback,interval);
+		this.lastInterval = interval;
+		return this
 	}
 	trp.run = function(callback,interval){
 		this.stop();
 		if(callback===null){
 			console.error("arg callback is null ");
-			return false;
+			return this;
 		}
 		if(interval===null){
 			console.error("arg interval is null ");
-			return false;
+			return this;
 		}
 		this.lastCallback = callback;
 		this.lastInterval = interval;
@@ -38,12 +42,12 @@ var TimerRepeat = (function(){
 					callback()
 			}
 		})(callback),interval);
-		return this.tm;
+		return this;
 	}
 	trp.stop = function(){
 		if(this.tm !== null){clearInterval(this.tm);}
 		this.tm = null;
-		return this.tm;
+		return this;
 	}
 
 	return TimerRepeat;
