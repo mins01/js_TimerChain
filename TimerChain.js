@@ -4,6 +4,7 @@
 * https://github.com/mins01/js_TimerChain
 * Date : 2019-05-17
 */
+var cnt = 0;
 var TimerChain = (function(){
 	"use strict";
 	var TimerChain = function(){	
@@ -62,23 +63,25 @@ var TimerChain = (function(){
 			value:function(){
 				if(this.length>0){
 					var arr = this.shift();
-					this.tm = setTimeout(function(cb,thisC){
+					this.tm = setTimeout(function(cb,thisC,timeout){
 						return function(){
 							cb();
 							thisC.run();
+							if(thisC.length==0){
+								thisC.isRunning = false;
+							}
 						}
-					}(arr[0],this),arr[1]);
+					}(arr[0],this,arr[1]),arr[1]);
 					this.lastCallback = arr[0];
 					this.lastTimeout = arr[1];
-				}
-				if(this.length==0){
-					this.isRunning = false;
+
 				}
 				return this;
 			}
 		},
 		"stop":{
 			value:function(){
+				this.isRunning = false;
 				this.clearTm();
 				return this;
 			}
