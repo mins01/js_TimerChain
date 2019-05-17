@@ -45,62 +45,45 @@
 	
 	<script src="TimerChain.js"></script>
 	<script>
-	var tc = null;
-	var tc2 = null;
-	var tc3 = null;
-	var n=0,n2=0,n3=0;
-	tc = new TimerChain();
-	tc2 = new TimerChain();
-	tc3 = new TimerChain();
+	var tc = new TimerChain();
+	var cnt = 0;
+	var cb = function(c){
+		return function(){
+			console.log(c,(new Date()).getTime() );
+		}
+	}
+	tc.push(cb(0),0)
+	.push(cb(1),1)
+	.push(cb(2),2)
+	.push(cb(3),3);
+	console.assert(tc[0][1]===0,"tc[0][1]===0")
+	tc.unshift(cb(4),4).unshift(cb(5),5).unshift(cb(6),6).unshift(cb(7),7)
+	console.assert(tc[0][1]===7,"tc[0][1]===7")
+	tc.splice(0,1)
+	console.assert(tc[0][1]===6,"tc[0][1]===6")
+	tc.splice(0,1,cb(8),8)
+	console.assert(tc[0][1]===8,"tc[0][1]===8")
+	console.assert(tc[1][1]===5,"tc[0][1]===5")
+	tc.splice(0,2,cb(9),9,cb(10),10,cb(11),11)
+	console.assert(tc[0][1]===9,"tc[0][1]===9")
+	console.assert(tc[1][1]===10,"tc[1][1]===10")
+	console.assert(tc[2][1]===11,"tc[2][1]===11")
+	console.assert(tc[3][1]===4,"tc[3][1]===4")
+	// console.log(tc)
+	tc.clear();
+	console.assert(tc.length===0,"tc.length===0")
+	tc.push(cb(12),1012).start().push(cb(13),1013).push(cb(14),1014)
 	tc.push(function(){
-		n++;
-		console.log("#1",(new Date).toString());
-	},1000)
-	.push(function(){
-		n++;
-		console.log("#2",(new Date).toString());
-		tc2.push(function(){
-			n2++;
-			console.log("#2-1",(new Date).toString());
-			console.assert(tc2.length==1);
-			console.assert(n2==1);
-		},1000)
-		.push(function(){
-			n2++;
-			console.log("#2-2",(new Date).toString());
-			console.assert(tc2.length==0);
-			console.assert(n2==2);
-		},1000)
-		.start();
-	},1000)
-	.push(function(){
-		n++;
-		console.log("#3",(new Date).toString());
-		tc3.push(function(){
-			n3++
-			console.log("#3-1",(new Date).toString());
-			console.assert(tc3.length==1);
-			console.assert(n3==1);
-		},1000)
-		.push(function(){
-			n3++
-			console.log("#3-2",(new Date).toString());
-			console.assert(tc3.length==0);
-			console.assert(n3==2);
-		},1000)
-		.start();
-		
-		tc.stop();
-		console.assert(tc.length==1);
-		console.assert(n==3);
-		tc.clear()
-	},1000)
-	.push(function(){
-		n++;
-		console.log("#4",(new Date).toString(),'보이면 안됨');
-		console.assert(false);
-	},1000)
-	.start();	
+		tc.stop(); //이때 이미 15번째가 setTimeout 동작
+		console.assert(tc.length===2,"tc.length===2")
+		console.log(tc)
+		tc.run().run(); //15와 16이 거의 동시에 나옴
+		console.log(tc)
+	},0).push(cb(15),1015).push(cb(16),1016);
+	
+	
+	
+
 	</script>
 </head>
 <body>
@@ -111,7 +94,7 @@
 			<li>Array.prototype 를 상속 받아서 사용</li>
 			<li>defineProperty 로 메소드와 변수들을 선언</li>
 			<li>var tc = new  TimerChain() 처럼 사용. 클래스화 </li>
-			<li>tc.push(fn,timout).push(fn,timout).start() 처럼 메소드 체이닝</li>
+			<li>tc.push(cb,timout).push(cb,timout).start() 처럼 메소드 체이닝</li>
 		</ul>
 		<h2>construct</h2>
 		<ul>
@@ -121,13 +104,22 @@
 		<ul>
 			<li>대부분의 메소드는 Array 에서 상속받음</li>
 			<li>.push(function, timeout)<br />
-				timeout에 맞춰서 동작 할 function 을 추가.
+				timeout에 맞춰서 동작 할 function 을 뒤에 추가.
+			</li>
+			<li>.unshift(function, timeout)<br />
+				timeout에 맞춰서 동작 할 function 을 맨 앞에 추가.
+			</li>
+			<li>.splice(start,deleteCount[,function, timeout [,function, timeout [,function, timeout , ...]]])<br />
+				start 위치에서 deleteCount 만큼 지우고 timeout에 맞춰서 동작 할 function 을 추가함
 			</li>
 			<li>.clear()<br />
 				추가한 function 들을 삭제. 모든 function 이 삭제되면 TimerChain 동작이 중지됨
 			</li>
 			<li>.start()<br />
-				TimerChain 시작. 순차적인 setTimeout 동작
+				TimerChain 시작. 순차적인 setTimeout 동작. 중복 동작 안됨
+			</li>
+			<li>.run()<br />
+				TimerChain 시작. 순차적인 setTimeout 동작. 중복 동작 됨. 실행시 다음함수가 즉시 setTimeout 으로 동작함
 			</li>
 			<li>.stop()<br />
 				TimerChain 종료. 다시 .start()하면 남은 function 만큼 동작함.
@@ -139,7 +131,7 @@
 		<h2>properties</h2>
 		<ul>
 			<li>대부분의 멤버 변수는 Array 에서 상속받음</li>
-			<li>.isStop = false or true<br />동작 중지 여부</li>
+			<li>.isRunning = false or true<br />동작 여부</li>
 			<li>.tm = null or int<br />setTimeout의 timeoutID</li>
 		</ul>
 	</div>
